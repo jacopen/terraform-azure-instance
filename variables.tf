@@ -29,3 +29,6 @@ variable "admin_username" {
 variable "admin_password" {
   default = "Password123!"
 }
+variable "managed_disk_type" {
+  default = "Standard_LRS"
+}

@@ -69,7 +69,7 @@ resource "azurerm_virtual_machine" "vm" {
   ## 起動ディスク
   storage_os_disk {
     name              = "${var.prefix}-module-osdisk-${random_id.id.hex}"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = var.managed_disk_type
     caching           = "ReadWrite"
     create_option     = "FromImage"
   }
