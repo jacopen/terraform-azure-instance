@@ -132,3 +132,25 @@ resource "azurerm_network_security_group" "sg" {
     destination_address_prefix = "*"
   }
 }
+
+
+## 追加ディスク
+resource "azurerm_managed_disk" "additional_disk" {
+  count                = var.additional_disk_name != "" ? 1 : 0  # additional_disk_nameが空欄の場合作成しない
+  name                 = var.additional_disk_name
+  location             = var.location
+  resource_group_name  = var.resource_group_name
+  storage_account_type = var.managed_disk_type
+  create_option        = "Empty"
+  disk_size_gb         = var.additional_disk_size
+  tags = var.additional_disk_tags
+}
+
+## 追加ディスクをVMにアタッチ
+resource "azurerm_virtual_machine_data_disk_attachment" "additional_disk" {
+  count                = var.additional_disk_name != "" ? 1 : 0
+  managed_disk_id    = azurerm_managed_disk.additional_disk[0].id
+  virtual_machine_id = azurerm_virtual_machine.vm.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
